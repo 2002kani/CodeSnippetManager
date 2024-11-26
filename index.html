@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Code Snippet Manager </title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Lexend:wght@100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Lexend:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <section class="sidebar">
+        <div class="top">
+            <div class="logo">
+                <i class='bx bx-code-alt'></i><span>Code<span>Cache.</span></span>
+            </div>
+            <i class="material-icons menu-btn">chevron_right</i>
+        </div>
+        <ul>
+            <li>
+                <a href="#">
+                    <i class='bx bx-folder-open'></i> 
+                    <span class="nav-item">Dokumente</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class='bx bx-search-alt-2' ></i> 
+                    <span class="nav-item">Suche</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class='bx bx-bookmark-heart'></i> 
+                    <span class="nav-item">Favoriten</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+
+    <section class="dokumente">
+        <div class="top">
+            <h1 id="ordner-name"> Dokumente </h1>
+            <button id="zurück-btn"><i class='bx bx-arrow-back'> </i> Zurück </button>
+        </div>
+        <div class="filter">
+            <button id="filter-datum"> Datum </button>
+            <button id="filter-sprache"> Sprache </button>
+            <button id="filter-titel"> Titel </button>
+        </div>
+
+        <div class="main-container">
+            <div class="erstellen-button grid">
+                <h1> + </h1>
+            </div>
+
+            <div class="erstellen-popup">
+                <div class="entfernen-button">
+                    <i class='bx bx-x'></i>
+                </div>
+                <h3> Hinzufügen </h3>
+                <div class="popup-button">
+                    <button id="ordner-btn"><i class='bx bx-folder'></i> Ordner </button>
+                    <button id="snippet-btn"><i class='bx bxs-file-doc'></i> Snippet </button>
+                </div>
+            </div>
+
+            <div class="ordnername-popup">
+                <div class="entfern-button">
+                    <i class='bx bx-x'></i>
+                </div>
+                <h3> Ordner benennen.. </h3>
+                <div class="popup-input">
+                    <input type="text" maxlength="25">
+                    <button class="fertig-button"> Fertig </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="index.js"></script>
+</body>
+</html>
