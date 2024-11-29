@@ -198,7 +198,7 @@
     margin-top: 25px;
     border-radius: 15px;
     padding: 2.5rem 1rem 1rem 2rem;
-    display: grid;
+    display: grid;  /*Ändern zu GRID!*/
     grid-template-columns: repeat(auto-fit, 150px);
     justify-content: start;
     align-content: start;
@@ -259,7 +259,7 @@
 }
 
 .grid img{
-    height: 110px;
+    height: 130px;
     cursor: pointer;
     margin-bottom: 10px;
 }
@@ -270,7 +270,7 @@
 }
 
 .grid p{
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
     color: #2a2a2a;
 }
@@ -447,4 +447,135 @@
     color: #41cb8d;
     font-weight: 300;
     font-size: 3rem;
+}
+
+/* Snippet Section */
+
+pre {
+    background-color: #2d2d2d;
+    color: #f8f8f2;
+    padding: 10px;
+    border-radius: 5px;
+    overflow-x: auto;
+    font-family: 'Fira Code', monospace;
+}
+
+.snippet-Popup{
+    position: absolute;
+    top: 50%;
+    left: 50%; 
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 3.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    visibility: hidden;  /* Hidden machen*/
+    border: 7px solid #41cb8d;
+}
+
+.snippet-Popup .entfernen-button {
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding-top: 10px;
+    font-size: 1.5rem;
+}
+
+.snippet-Popup .entfernen-button i{
+    font-weight: 700;
+    color: #41cb8d;
+    padding-right: 0.6rem;
+}
+
+.snippet-Popup .snippet-beschreibung {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+}
+
+.snippet-Popup .snippet-beschreibung #snippet-titel{
+    height: 3rem;
+    font-size: 20px;
+    font-weight: 600;
+    border: none;
+    padding: 0.2rem;
+    border-radius: 10px;
+    color: #2a2a2a;
+}
+
+.snippet-Popup .snippet-beschreibung #snippet-titel:focus{
+    outline: none;
+}
+
+.snippet-Popup .snippet-beschreibung #snippet-kurztext{
+    padding: 0.4rem;
+    border-radius: 10px;
+    border: none;
+    background: #eee;
+    height: 40px;
+}
+
+.snippet-Popup .snippet-beschreibung #snippet-kurztext:focus{
+    outline: none;
+}
+
+.snippet-Popup textarea{
+    width: 100%;
+    height: 200px;
+    padding: 0.5rem;
+    margin-top: 1rem;
+    border-radius: 10px;
+    border: none;
+    background: #eee;
+    margin-bottom: 10px;
+    font-family: monospace;
+    font-size: 14px;
+}
+
+.snippet-Popup textarea:focus{
+    outline: none;
+}
+
+.snippet-Popup .snippet-code button {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    background-color: #eee;
+    border: none;
+    color: #adadad;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: 500;
+}
+
+.snippet-Popup .snippet-code button:hover {
+    background-color: #41cb8d;
+    color: #fff;
+}
+
+.code-div .mini-version {
+    height: 130px;
+    width: 130px;
+    overflow-x: auto;
+    overflow-y: auto;
+    /*border: 1px solid #ccc;*/
+    padding: 2px;
+    white-space: pre;
+    word-wrap: break-word;
+    font-family: "Courier New", monospace;
+    /*background-color: #f9f9f9;*/
+    box-sizing: border-box;
+}
+
+.code-div p{
+    text-align: center;
+    margin-top: 0.6rem;
+    font-size: 13px;
+    font-weight: 600;
 }
