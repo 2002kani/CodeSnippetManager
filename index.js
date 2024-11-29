@@ -33,6 +33,10 @@ const zurückBtn = document.getElementById("zurück-btn");
 
 erstellenBtn.addEventListener("click", function(){
     popup.style.visibility = "visible";
+    /*snippetBtn.addEventListener("click", function(){
+        alert("Erstelle zunächst ein Ordner um ein Snippet hinzuzufügen.")
+        return;
+    })*/
 });
 
 entfernBtn.addEventListener("click", function(){
@@ -92,7 +96,7 @@ function erstelleOrdner(name, zielContainer = mainContent){
 
     neuesGrid.querySelector("img").addEventListener("click", function(){
         const { container } = erstelleOrdnerContainer(name);
-        AnzeigenOrdnerContainer(container, name);
+        AnzeigenOrdnerContainer(container, name, dokumente);
     });
 
     const löschButton = neuesGrid.querySelector(".bx-x");
@@ -115,7 +119,7 @@ function löscheOrdner(name, ordnerElement){
     localStorage.setItem("ordner", JSON.stringify(gespeicherteOrdner));
 }
 
-function addErstellenPopup(){
+function addErstellenPopup(parent){
     const erstellenPopupDiv = document.createElement("div");
     erstellenPopupDiv.classList.add("erstellen-popup");
     erstellenPopupDiv.style.visibility = "visible";
@@ -139,9 +143,13 @@ function addErstellenPopup(){
     ordnerBtn.classList.add("ordner-btn");
     ordnerBtn.textContent = "Ordner";
     ordnerBtn.addEventListener("click", function(){
+        if(parent){
+            alert("Du kannst derzeit keine Ordner in einen Ordner erstellen. Ich arbeite allerdings dran..");
+            return;
+        }
         erstellenPopupDiv.style.visibility = "hidden";
         erstellenPopupDiv.remove();
-        addOrdnernamePopup();
+        addOrdnernamePopup(parent);
     });
 
     const iOrderBtn = document.createElement("i");
@@ -152,7 +160,10 @@ function addErstellenPopup(){
     const snippetBtn = document.createElement("button");
     snippetBtn.classList.add("snippet-btn");
     snippetBtn.textContent = "Snippet";
-    // BALD HIER SNIPPET CODE WIE PAAR ZEILEN DRÜBER MACHEN
+    snippetBtn.addEventListener("click", function(){
+        erstelleSnippetPopup();
+        erstellenPopupDiv.remove();
+    })
 
     const isnippetBtn = document.createElement("i");
     isnippetBtn.classList.add("bx", "bxs-file-doc");
@@ -173,7 +184,7 @@ function addErstellenPopup(){
     dokumente.insertAdjacentElement("beforeend", erstellenPopupDiv);
 }
 
-function addOrdnernamePopup(){
+function addOrdnernamePopup(parent){
     const ordnernamePopupDiv = document.createElement("div");
     ordnernamePopupDiv.classList.add("ordnername-popup");
     ordnernamePopupDiv.style.visibility = "visible";
@@ -209,9 +220,8 @@ function addOrdnernamePopup(){
         }
         ordnernamePopupDiv.remove();
         const { container } = erstelleOrdnerContainer(inputordnerName);
-        AnzeigenOrdnerContainer(container, inputordnerName);
+        AnzeigenOrdnerContainer(container, inputordnerName, parent);
         erstelleOrdner(inputordnerName, container);
-        console.log(container);
     });
 
     entfernbuttonDiv.appendChild(x);
@@ -228,6 +238,8 @@ function addOrdnernamePopup(){
 
 
 // Ordner Section
+let gespeicherterOrdnerInhalt;
+
 function erstelleOrdnerContainer(name) {
     const NeuOrdnerInhalt = document.createElement("div");
     NeuOrdnerInhalt.classList.add("ordner-inhalt");
@@ -236,7 +248,7 @@ function erstelleOrdnerContainer(name) {
     const NeuErstellenbuttonOrdnerDiv = document.createElement("div");
     NeuErstellenbuttonOrdnerDiv.classList.add("erstellen-button-ordner", "grid");
     NeuErstellenbuttonOrdnerDiv.addEventListener("click", function() {
-        addErstellenPopup();
+        addErstellenPopup(NeuOrdnerInhalt);
     });
 
     const NeuH1 = document.createElement("h1");
@@ -245,11 +257,12 @@ function erstelleOrdnerContainer(name) {
     NeuErstellenbuttonOrdnerDiv.appendChild(NeuH1);
     NeuOrdnerInhalt.appendChild(NeuErstellenbuttonOrdnerDiv);
 
+    gespeicherterOrdnerInhalt = NeuOrdnerInhalt;
     return { container: NeuOrdnerInhalt, name };
 }
 
-function AnzeigenOrdnerContainer(ordnerContainer, name){
-    dokumente.appendChild(ordnerContainer);
+function AnzeigenOrdnerContainer(ordnerContainer, name, parent){
+    parent.appendChild(ordnerContainer);
 
     mainContent.style.display = "none";
     filter.style.display = "none"
@@ -268,3 +281,91 @@ function AnzeigenOrdnerContainer(ordnerContainer, name){
     });
 }
     
+// Snippet Section
+function erstelleSnippet(name, parentelement, codeblockcode){
+    const codeDiv = document.createElement("div");
+    codeDiv.classList.add("code-div");
+
+    const pre = document.createElement("pre");
+    pre.classList.add("mini-version");
+
+    const code = document.createElement("code");
+    code.classList.add("language-javascript");
+    code.id = "code-block";
+
+    code.textContent = codeblockcode.value;
+    hljs.highlightElement(code);
+
+    const p = document.createElement("p");
+    p.textContent = name;
+
+    codeDiv.appendChild(p);
+    codeDiv.appendChild(pre);
+    pre.appendChild(code);
+    codeDiv.appendChild(p);
+
+    parentelement.appendChild(codeDiv);
+}
+
+function erstelleSnippetPopup(){
+    const snippetPopupDiv = document.createElement("div");
+    snippetPopupDiv.classList.add("snippet-Popup");
+    snippetPopupDiv.style.visibility = "visible";
+
+    const entfernenButtonDiv = document.createElement("div");
+    entfernenButtonDiv.classList.add("entfernen-button");
+
+    const zurückIcon = document.createElement("i");
+    zurückIcon.classList.add("bx", "bx-x");
+    zurückIcon.addEventListener("click", function(){
+        snippetPopupDiv.remove();
+    });
+
+    entfernenButtonDiv.appendChild(zurückIcon);
+
+    const snippetBeschreibungDiv = document.createElement("div");
+    snippetBeschreibungDiv.classList.add("snippet-beschreibung");
+
+    const titelInput = document.createElement("input");
+    titelInput.type = "text";
+    titelInput.id = "snippet-titel";
+    titelInput.placeholder = "Neuer Titel..";
+    const kurztextInput = document.createElement("input");
+    kurztextInput.type = "text";
+    kurztextInput.id = "snippet-kurztext";
+    kurztextInput.placeholder = "Kurze Beschreibung..";
+    kurztextInput.maxLength = "40";
+
+    snippetBeschreibungDiv.appendChild(titelInput);
+    snippetBeschreibungDiv.appendChild(kurztextInput);
+
+    const snippetCodeDiv = document.createElement("div");
+    snippetCodeDiv.classList.add("snippet-code");
+
+    const textArea = document.createElement("textarea");
+    textArea.classList.add("code-input");
+    textArea.placeholder = "Füge hier dein Code Snippet ein..";
+
+    const speichernButton = document.createElement("button");
+    speichernButton.classList.add("snippet-fertig");
+    speichernButton.textContent = "Speichern";
+    speichernButton.addEventListener("click", function(){
+        const snippetName = titelInput.value.trim();
+
+        if(textArea.value === "" || titelInput.value === "" || kurztextInput.value === ""){
+            alert("Bitte Fülle alle Daten aus.")
+            return;
+        }
+        erstelleSnippet(snippetName, gespeicherterOrdnerInhalt, textArea);
+        snippetPopupDiv.remove();
+    });
+
+    snippetCodeDiv.appendChild(textArea);
+    snippetCodeDiv.appendChild(speichernButton);
+
+    snippetPopupDiv.appendChild(entfernenButtonDiv);
+    snippetPopupDiv.appendChild(snippetBeschreibungDiv);
+    snippetPopupDiv.appendChild(snippetCodeDiv);
+
+    dokumente.appendChild(snippetPopupDiv);
+}
