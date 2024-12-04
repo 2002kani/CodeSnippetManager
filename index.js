@@ -239,23 +239,32 @@ function addOrdnernamePopup(parent){
 
 // Ordner Section
 let gespeicherterOrdnerInhalt;
+    function erstelleOrdnerContainer(name) {
+        const erstellenButtonDiv = document.createElement("div");
+        erstellenButtonDiv.classList.add("erstellen-button-div");
 
-function erstelleOrdnerContainer(name) {
-    const NeuOrdnerInhalt = document.createElement("div");
-    NeuOrdnerInhalt.classList.add("ordner-inhalt");
-    NeuOrdnerInhalt.style.display = "Grid";
+        const NeuErstellenbuttonOrdnerDiv = document.createElement("div");
+        NeuErstellenbuttonOrdnerDiv.classList.add("erstellen-button-ordner", "grid");
+        NeuErstellenbuttonOrdnerDiv.addEventListener("click", function() {
+            addErstellenPopup(NeuOrdnerInhalt);
+            // Hier snippet function rein
+        });
 
-    const NeuErstellenbuttonOrdnerDiv = document.createElement("div");
-    NeuErstellenbuttonOrdnerDiv.classList.add("erstellen-button-ordner", "grid");
-    NeuErstellenbuttonOrdnerDiv.addEventListener("click", function() {
-        addErstellenPopup(NeuOrdnerInhalt);
-    });
+        const NeuH1 = document.createElement("h1");
+        NeuH1.textContent = "+ Erstellen";
 
-    const NeuH1 = document.createElement("h1");
-    NeuH1.textContent = "+";
+        const NeuOrdnerInhalt = document.createElement("div");
+        NeuOrdnerInhalt.classList.add("ordner-inhalt");
+        NeuOrdnerInhalt.style.display = "Grid";
 
+        zurückBtn.addEventListener("click", function(){
+            erstellenButtonDiv.remove();
+        });
+
+    erstellenButtonDiv.appendChild(NeuErstellenbuttonOrdnerDiv);
     NeuErstellenbuttonOrdnerDiv.appendChild(NeuH1);
-    NeuOrdnerInhalt.appendChild(NeuErstellenbuttonOrdnerDiv);
+    mainContent.insertAdjacentElement("afterend", erstellenButtonDiv)
+    //  alt:   NeuOrdnerInhalt.appendChild(NeuErstellenbuttonOrdnerDiv);
 
     gespeicherterOrdnerInhalt = NeuOrdnerInhalt;
     return { container: NeuOrdnerInhalt, name };
@@ -282,12 +291,36 @@ function AnzeigenOrdnerContainer(ordnerContainer, name, parent){
 }
     
 // Snippet Section
-function erstelleSnippet(name, parentelement, codeblockcode){
-    const codeDiv = document.createElement("div");
-    codeDiv.classList.add("code-div");
+function erstelleSnippet(name, parentelement, codeblockcode, kurztextInput){
+    const snippetContainerDiv = document.createElement("div");
+    snippetContainerDiv.classList.add("snippet-container");
+
+    const beschreibungDiv = document.createElement("div");
+    beschreibungDiv.classList.add("beschreibung");
+
+    const detailsDiv = document.createElement("div");
+    detailsDiv.classList.add("details-div");
+
+    const h1 = document.createElement("h1");
+    h1.textContent = name;
+
+    const entfernenDiv = document.createElement("div");
+    entfernenDiv.classList.add("lösch-snippet-btn");
+
+    const favorisierenI = document.createElement("i");
+    favorisierenI.classList.add("bx", "bx-heart");
+
+    const x = document.createElement("i");
+    x.classList.add("bx", "bx-x");
+    x.addEventListener("click", function(){
+        snippetContainerDiv.remove();
+    });
+
+    const p = document.createElement("p");
+    p.textContent = kurztextInput.value;
 
     const pre = document.createElement("pre");
-    pre.classList.add("mini-version");
+    pre.classList.add("code-section")
 
     const code = document.createElement("code");
     code.classList.add("language-javascript");
@@ -296,15 +329,21 @@ function erstelleSnippet(name, parentelement, codeblockcode){
     code.textContent = codeblockcode.value;
     hljs.highlightElement(code);
 
-    const p = document.createElement("p");
-    p.textContent = name;
+    entfernenDiv.appendChild(favorisierenI);
+    entfernenDiv.appendChild(x);
 
-    codeDiv.appendChild(p);
-    codeDiv.appendChild(pre);
+    detailsDiv.appendChild(h1);
+    detailsDiv.appendChild(entfernenDiv);
+
+    beschreibungDiv.appendChild(detailsDiv);
+    beschreibungDiv.appendChild(p);
+
     pre.appendChild(code);
-    codeDiv.appendChild(p);
 
-    parentelement.appendChild(codeDiv);
+    snippetContainerDiv.appendChild(beschreibungDiv);
+    snippetContainerDiv.appendChild(pre);
+    
+    parentelement.appendChild(snippetContainerDiv);
 }
 
 function erstelleSnippetPopup(){
@@ -330,6 +369,8 @@ function erstelleSnippetPopup(){
     titelInput.type = "text";
     titelInput.id = "snippet-titel";
     titelInput.placeholder = "Neuer Titel..";
+    titelInput.maxLength = "30";
+
     const kurztextInput = document.createElement("input");
     kurztextInput.type = "text";
     kurztextInput.id = "snippet-kurztext";
@@ -356,7 +397,7 @@ function erstelleSnippetPopup(){
             alert("Bitte Fülle alle Daten aus.")
             return;
         }
-        erstelleSnippet(snippetName, gespeicherterOrdnerInhalt, textArea);
+        erstelleSnippet(snippetName, gespeicherterOrdnerInhalt, textArea, kurztextInput);
         snippetPopupDiv.remove();
     });
 
