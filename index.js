@@ -33,10 +33,6 @@ const zurückBtn = document.getElementById("zurück-btn");
 
 erstellenBtn.addEventListener("click", function(){
     popup.style.visibility = "visible";
-    /*snippetBtn.addEventListener("click", function(){
-        alert("Erstelle zunächst ein Ordner um ein Snippet hinzuzufügen.")
-        return;
-    })*/
 });
 
 entfernBtn.addEventListener("click", function(){
@@ -94,9 +90,17 @@ function erstelleOrdner(name, zielContainer = mainContent){
         <i class='bx bx-heart'></i><i class='bx bx-x'></i>
         </div>`;
 
-    neuesGrid.querySelector("img").addEventListener("click", function(){
-        const { container } = erstelleOrdnerContainer(name);
-        AnzeigenOrdnerContainer(container, name, dokumente);
+    neuesGrid.querySelector("img").addEventListener("click", function () {
+        let vorhandenerContainer = Array.from(document.querySelectorAll(".ordner-inhalt"))
+            .find(container => container.dataset.name === name);
+
+        if (vorhandenerContainer) {
+            AnzeigenOrdnerContainer(vorhandenerContainer, name, dokumente);
+        } else {
+            const { container: neuerContainer } = erstelleOrdnerContainer(name);
+            neuerContainer.setAttribute("data-name", name);
+            AnzeigenOrdnerContainer(neuerContainer, name, dokumente);
+        }
     });
 
     const löschButton = neuesGrid.querySelector(".bx-x");
@@ -247,7 +251,6 @@ let gespeicherterOrdnerInhalt;
         NeuErstellenbuttonOrdnerDiv.classList.add("erstellen-button-ordner", "grid");
         NeuErstellenbuttonOrdnerDiv.addEventListener("click", function() {
             addErstellenPopup(NeuOrdnerInhalt);
-            // Hier snippet function rein
         });
 
         const NeuH1 = document.createElement("h1");
@@ -264,13 +267,37 @@ let gespeicherterOrdnerInhalt;
     erstellenButtonDiv.appendChild(NeuErstellenbuttonOrdnerDiv);
     NeuErstellenbuttonOrdnerDiv.appendChild(NeuH1);
     mainContent.insertAdjacentElement("afterend", erstellenButtonDiv)
-    //  alt:   NeuOrdnerInhalt.appendChild(NeuErstellenbuttonOrdnerDiv);
 
     gespeicherterOrdnerInhalt = NeuOrdnerInhalt;
     return { container: NeuOrdnerInhalt, name };
 }
 
+let aktuellerOrdner = null;
+
 function AnzeigenOrdnerContainer(ordnerContainer, name, parent){
+    aktuellerOrdner = JSON.parse(localStorage.getItem("ordner"))
+        .find(ordner => ordner.name === name);
+
+    let erstellenButtonDiv = document.querySelector(".erstellen-button-div");
+
+    if (!erstellenButtonDiv) {
+        const neuerErstellenButtonDiv = document.createElement("div");
+        neuerErstellenButtonDiv.classList.add("erstellen-button-div");
+
+        const NeuErstellenbuttonOrdnerDiv = document.createElement("div");
+        NeuErstellenbuttonOrdnerDiv.classList.add("erstellen-button-ordner", "grid");
+        NeuErstellenbuttonOrdnerDiv.addEventListener("click", function () {
+            addErstellenPopup(ordnerContainer);
+        });
+
+        const NeuH1 = document.createElement("h1");
+        NeuH1.textContent = "+ Erstellen";
+
+        NeuErstellenbuttonOrdnerDiv.appendChild(NeuH1);
+        neuerErstellenButtonDiv.appendChild(NeuErstellenbuttonOrdnerDiv);
+
+        mainContent.insertAdjacentElement("afterend", neuerErstellenButtonDiv);
+    }
     parent.appendChild(ordnerContainer);
 
     mainContent.style.display = "none";
@@ -280,6 +307,7 @@ function AnzeigenOrdnerContainer(ordnerContainer, name, parent){
     ordnerName.textContent = name;
     zurückBtn.style.display = "block";
 
+    zurückBtn.onclick = null;
     zurückBtn.addEventListener("click", function(){
         zurückBtn.style.display = "none";
         mainContent.style.display = "grid";
@@ -287,7 +315,14 @@ function AnzeigenOrdnerContainer(ordnerContainer, name, parent){
         ordnerContainer.style.display = "none";
 
         ordnerName.textContent = "Dokumente";
+
+        const vorhandenerErstellenButtonDiv = document.querySelector(".erstellen-button-div");
+        if (vorhandenerErstellenButtonDiv) {
+            vorhandenerErstellenButtonDiv.remove();
+        }
     });
+
+    ladeSnippets(name, ordnerContainer);
 }
     
 // Snippet Section
@@ -313,7 +348,9 @@ function erstelleSnippet(name, parentelement, codeblockcode, kurztextInput){
     const x = document.createElement("i");
     x.classList.add("bx", "bx-x");
     x.addEventListener("click", function(){
+        const aktuellerOrdnerName = ordnerName.textContent;
         snippetContainerDiv.remove();
+        löscheSnippet(name, aktuellerOrdnerName);
     });
 
     const p = document.createElement("p");
@@ -392,13 +429,37 @@ function erstelleSnippetPopup(){
     speichernButton.textContent = "Speichern";
     speichernButton.addEventListener("click", function(){
         const snippetName = titelInput.value.trim();
-
+    
         if(textArea.value === "" || titelInput.value === "" || kurztextInput.value === ""){
-            alert("Bitte Fülle alle Daten aus.")
+            alert("Bitte fülle alle Daten aus.")
             return;
         }
-        erstelleSnippet(snippetName, gespeicherterOrdnerInhalt, textArea, kurztextInput);
-        snippetPopupDiv.remove();
+    
+        const aktuellerOrdnerName = ordnerName.textContent;
+        
+        let gespeicherteOrdner = JSON.parse(localStorage.getItem("ordner")) || [];
+        
+        let aktuellerOrdnerIndex = gespeicherteOrdner.findIndex(o => o.name === aktuellerOrdnerName);
+    
+        if (aktuellerOrdnerIndex !== -1) {
+            
+            if (!gespeicherteOrdner[aktuellerOrdnerIndex].snippets) {
+                gespeicherteOrdner[aktuellerOrdnerIndex].snippets = [];
+            }
+    
+            gespeicherteOrdner[aktuellerOrdnerIndex].snippets.push({
+                name: snippetName,
+                kurztext: kurztextInput.value,
+                code: textArea.value
+            });
+
+            localStorage.setItem("ordner", JSON.stringify(gespeicherteOrdner));
+    
+            erstelleSnippet(snippetName, gespeicherterOrdnerInhalt, textArea, kurztextInput);
+            snippetPopupDiv.remove();
+        } else {
+            alert("Fehler: Ordner nicht gefunden");
+        }
     });
 
     snippetCodeDiv.appendChild(textArea);
@@ -409,4 +470,41 @@ function erstelleSnippetPopup(){
     snippetPopupDiv.appendChild(snippetCodeDiv);
 
     dokumente.appendChild(snippetPopupDiv);
+}
+
+function ladeSnippets(ordnerName, ordnerContainer) {
+    const vorhanndeneSnippets = document.querySelectorAll(".snippet-container");
+    vorhanndeneSnippets.forEach(snippet => snippet.remove());
+
+    const gespeicherteOrdner = JSON.parse(localStorage.getItem("ordner")) || [];
+    const aktuellerOrdner = gespeicherteOrdner.find(o => o.name === ordnerName);
+
+    if (aktuellerOrdner && aktuellerOrdner.snippets) {
+        aktuellerOrdner.snippets.forEach(function(snippet) {
+            /*const parentElement = document.querySelector(".ordner-inhalt");
+            erstelleSnippet(snippet.name, parentElement, { value: snippet.code }, { value: snippet.kurztext });*/
+            erstelleSnippet(
+                snippet.name, 
+                ordnerContainer, 
+                { value: snippet.code }, 
+                { value: snippet.kurztext }
+            );
+        });
+    }
+}
+
+function löscheSnippet(snippetName, ordnerName) {
+    let gespeicherteOrdner = JSON.parse(localStorage.getItem("ordner")) || [];
+    
+    let ordnerIndex = gespeicherteOrdner.findIndex(ordner => ordner.name === ordnerName);
+    
+    if (ordnerIndex !== -1) {
+        // Snippets in diesem Ordner filtern
+        if (gespeicherteOrdner[ordnerIndex].snippets) {
+            gespeicherteOrdner[ordnerIndex].snippets = gespeicherteOrdner[ordnerIndex].snippets.filter(
+                snippet => snippet.name !== snippetName
+            );
+            localStorage.setItem("ordner", JSON.stringify(gespeicherteOrdner));
+        }
+    }
 }
