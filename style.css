@@ -17,8 +17,12 @@
 }
  
 .sidebar.active ~ .dokumente{
-    left: 250px; /*250*/
-    width: calc(100% - 250px); /*250*/
+    left: 250px;
+    width: calc(100% - 250px);
+}
+.sidebar.active ~ .suche{
+    left: 250px;
+    width: calc(100% - 250px);
 }
 
 .sidebar.active{
@@ -39,7 +43,7 @@
 }
 
 .sidebar.active .menu-btn{
-    left: 90%; /* 90 */
+    left: 90%;
 }
 
 .sidebar .top .logo{
@@ -120,6 +124,7 @@
     transition: all 0.5s ease;
     width: calc(100% - 80px);
     padding: 1.5rem;
+    display: block;
 }
 
 .dokumente .top{
@@ -141,6 +146,7 @@
     font-weight: 600;
     cursor: pointer;
     display: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 .dokumente .top i{
@@ -149,7 +155,7 @@
 
 .dokumente .top button:hover{
     background: #37b17c;
-    transition: 0.2s;
+    transition: 0.25s;
 }
 
 .dokumente .top h1{
@@ -199,7 +205,7 @@
     margin-top: 25px;
     border-radius: 15px;
     padding: 2.5rem 1rem 1rem 2rem;
-    display: grid;  /*Ändern zu GRID!*/
+    display: grid; 
     grid-template-columns: repeat(auto-fit, 150px);
     justify-content: start;
     align-content: start;
@@ -248,15 +254,31 @@
     position: absolute;
     top: 32px;
     right: 43px;
-    font-size: 20px;
+    font-size: 18px;
+    background: #fff;
+    border-radius: 4px;
+    color: #41cb8d;
+    padding: 2px;
 }
 
 .grid .bx-heart:hover{
-    color: rgb(243, 213, 45);
+    transition: 0.25s;
+    transform: scale(1.08);
 }
 
-.grid i:hover{
+.grid .bx-x{
+    top: 32px;
+    font-size: 20px;
+    background: #fff;
+    border-radius: 4px;
+    color: #41cb8d;
+    padding: 1px;
+}
+
+.grid .bx-x:hover{
     color: #dd5151;
+    transition: 0.25s;
+    transform: scale(1.08);
 }
 
 .grid img{
@@ -266,8 +288,8 @@
 }
 
 .grid img:hover{
-    transform: scale(1.05);
-    transition: 0.2s;
+    transform: translateY(-3px);
+    transition: 0.25s;
 }
 
 .grid p{
@@ -446,8 +468,9 @@
     background: #41cb8d;
     border-radius: 12px;
     cursor: pointer;
-    height: 40px; /*150*/
+    height: 40px;
     width: 140px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 .erstellen-button-ordner.grid:hover{
@@ -486,7 +509,7 @@ pre #code-block{
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     z-index: 1000;
-    visibility: hidden;  /* Hidden machen*/
+    visibility: hidden;
     border: 7px solid #41cb8d;
 }
 
@@ -657,4 +680,103 @@ pre #code-block{
 .lösch-snippet-btn i:hover{
     transition: 0.3s;
     transform: scale(1.1);
+}
+
+.lösch-snippet-btn .bx-x:hover{
+    color: #dd5151;
+}
+
+.suche{
+    position: relative;
+    background-color: #eee;
+    min-height: 100vh;
+    top: 0;
+    left: 80px;
+    transition: all 0.5s ease;
+    width: calc(100% - 80px);
+    padding: 1.5rem;
+    display: none;
+}
+
+.suche .suche-top {
+    background: #fff;
+    padding: 0.8rem;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: default;
+    /*box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
+}
+
+.suche .suche-top input[type="search"] {
+    border: none;
+    outline: none;
+    background: none;
+    width: 100%;
+    font-size: 1rem;
+    margin-right: 0.5rem;
+    color: #333;
+}
+
+.suche .suche-top input[type="search"]::placeholder {
+    color: #aaa;
+    opacity: 1;
+}
+
+.suche-top input[type="search"]::-webkit-search-cancel-button {
+    display: none;
+}
+
+.suche .suche-top i {
+    background: #fff;
+    border-radius: 10px;
+    padding: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+    color: #41cb8d;
+}
+
+.suche .suche-top i:hover {
+    background-color: #eee;
+    color: #2a2a2a;
+}
+
+.suche-container{
+    width: 100%;
+    height: 82vh;
+    background-color: #fff;
+    margin-top: 25px;
+    border-radius: 15px;
+    padding: 2.5rem 1rem 1rem 2rem;
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, 390px);
+    justify-content: start;
+    align-content: start;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    gap: 2rem;
+    visibility: visible;
+}
+
+#keine-ergebnisse {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+    width: 100%;
+    font-size: 1.5rem; 
+    color: #999; 
+    visibility: hidden;
+}
+
+.suche-container.no-results {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
