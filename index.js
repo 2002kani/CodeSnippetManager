@@ -2,6 +2,31 @@
 const menuBtn = document.querySelector(".menu-btn");
 const sidebar = document.querySelector(".sidebar");
 
+const dokumenteBar = document.getElementById("dokumente-bar").addEventListener("click", function(){
+    dokumente.style.display = "block";
+    suche.style.display = "none";
+});
+const sucheBar = document.getElementById("suche-bar").addEventListener("click", function(){
+    dokumente.style.display = "none";
+    suche.style.display = "block";
+});
+const favoritenBar = document.getElementById("favoriten-bar").addEventListener("click", function(){
+    dokumente.style.display = "none";
+    suche.style.display = "none";
+});
+const dokumenteBarIcon = document.querySelector(".bx-folder-open").addEventListener("click", function(){
+    dokumente.style.display = "block";
+    suche.style.display = "none";
+});
+const sucheBarIcon = document.querySelector(".bx-search-alt-2").addEventListener("click", function(){
+    dokumente.style.display = "none";
+    suche.style.display = "block";
+});
+const favoritenBarIcon = document.querySelector(".bx-bookmark-heart").addEventListener("click", function(){
+    dokumente.style.display = "none";
+    suche.style.display = "none";
+});
+
 menuBtn.addEventListener("click", function(){
     sidebar.classList.toggle("active");
 
@@ -14,6 +39,7 @@ menuBtn.addEventListener("click", function(){
 
 // Popup Section
 const dokumente = document.querySelector(".dokumente");
+const suche = document.querySelector(".suche");
 const popup = document.querySelector(".erstellen-popup");
 const erstellenBtn = document.querySelector(".erstellen-button.grid");
 const entfernBtn = document.querySelector(".entfernen-button");
@@ -43,6 +69,7 @@ ordnerBtn.addEventListener("click", function(){
     popup.style.visibility = "hidden";
     ordnernamePopup.style.visibility = "visible";
 });
+
 
 window.addEventListener("DOMContentLoaded", ladeOrdner);
 
@@ -101,6 +128,7 @@ function erstelleOrdner(name, zielContainer = mainContent){
             neuerContainer.setAttribute("data-name", name);
             AnzeigenOrdnerContainer(neuerContainer, name, dokumente);
         }
+        sucheSnippets();
     });
 
     const löschButton = neuesGrid.querySelector(".bx-x");
@@ -320,6 +348,7 @@ function AnzeigenOrdnerContainer(ordnerContainer, name, parent){
         if (vorhandenerErstellenButtonDiv) {
             vorhandenerErstellenButtonDiv.remove();
         }
+        sucheSnippets();
     });
 
     ladeSnippets(name, ordnerContainer);
@@ -349,8 +378,16 @@ function erstelleSnippet(name, parentelement, codeblockcode, kurztextInput){
     x.classList.add("bx", "bx-x");
     x.addEventListener("click", function(){
         const aktuellerOrdnerName = ordnerName.textContent;
+        const snippetName = name;
         snippetContainerDiv.remove();
-        löscheSnippet(name, aktuellerOrdnerName);
+
+        const istSucheContainer = parentelement.classList.contains("suche-container");
+
+        if (istSucheContainer){
+            löscheSnippetInSuche(snippetName);
+        } else{
+            löscheSnippet(name, aktuellerOrdnerName);
+        }
     });
 
     const p = document.createElement("p");
@@ -508,3 +545,78 @@ function löscheSnippet(snippetName, ordnerName) {
         }
     }
 }
+
+
+// Such Section
+const sucheContainer = document.querySelector(".suche-container");
+const searchBtn = document.getElementById("search-btn");
+
+function toggleKeineErgebnisse(show) {
+    const keineErgebnisse = document.getElementById('keine-ergebnisse');
+    const sucheContainer = document.querySelector('.suche-container');
+    
+    if (keineErgebnisse && sucheContainer) {
+        if (show) {
+            keineErgebnisse.style.display = 'block';
+            sucheContainer.classList.add('no-results');
+        } else {
+            keineErgebnisse.style.display = 'none';
+            sucheContainer.classList.remove('no-results');
+        }
+    }
+}
+// toggleKeineErgebnisse(true); // So anzeigen, wenn keine suchergebnisse gefunden
+// toggleKeineErgebnisse(false); // So anzeigen, wenn suchergebnisse gefunden
+
+function sucheSnippets(){
+    const suchInput = document.getElementById("suche-input").value.toLowerCase().trim();
+    const sucheContainer = document.querySelector(".suche-container");
+
+    //vorherige Suchergebnisse löschen
+    sucheContainer.innerHTML = "";
+
+    let gefundeneSnippets = [];
+    let AlleOrdner = JSON.parse(localStorage.getItem("ordner"));
+
+    AlleOrdner.forEach(ordner => {
+        if(ordner.snippets){
+            const gefilterteSnippets = ordner.snippets.filter(snippet =>
+                snippet.name.toLowerCase().includes(suchInput)
+            );
+
+            gefundeneSnippets = gefundeneSnippets.concat(gefilterteSnippets);
+        }
+    });
+
+    if(gefundeneSnippets.length > 0){
+        gefundeneSnippets.forEach(snippet => {
+            erstelleSnippet(
+                snippet.name,
+                sucheContainer,
+                { value: snippet.code },
+                { value: snippet.kurztext }
+            );
+        });
+        toggleKeineErgebnisse(false);
+    } else{
+        toggleKeineErgebnisse(true);
+    }
+}
+
+function löscheSnippetInSuche(snippetName){
+    let AlleOrdner = JSON.parse(localStorage.getItem("ordner")) || [];
+
+    AlleOrdner.forEach(ordner => {
+        if(ordner.snippets){
+            ordner.snippets = ordner.snippets.filter(snippet =>
+            snippet.name !== snippetName);
+        }
+    });
+    localStorage.setItem("ordner", JSON.stringify(AlleOrdner));
+    sucheSnippets();
+}
+
+window.addEventListener('DOMContentLoaded', sucheSnippets);
+
+document.getElementById("suche-input").addEventListener("input", sucheSnippets);
+document.getElementById("search-btn").addEventListener("click", sucheSnippets);
