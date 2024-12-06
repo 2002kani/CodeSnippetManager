@@ -572,7 +572,6 @@ function sucheSnippets(){
     const suchInput = document.getElementById("suche-input").value.toLowerCase().trim();
     const sucheContainer = document.querySelector(".suche-container");
 
-    //vorherige Suchergebnisse löschen
     sucheContainer.innerHTML = "";
 
     let gefundeneSnippets = [];
