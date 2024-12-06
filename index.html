@@ -23,19 +23,19 @@
             <li>
                 <a href="#">
                     <i class='bx bx-folder-open'></i> 
-                    <span class="nav-item">Dokumente</span>
+                    <span class="nav-item" id="dokumente-bar">Dokumente</span>
                 </a>
             </li>
             <li>
                 <a href="#">
                     <i class='bx bx-search-alt-2' ></i> 
-                    <span class="nav-item">Suche</span>
+                    <span class="nav-item" id="suche-bar">Suche</span>
                 </a>
             </li>
             <li>
                 <a href="#">
                     <i class='bx bx-bookmark-heart'></i> 
-                    <span class="nav-item">Favoriten</span>
+                    <span class="nav-item" id="favoriten-bar">Favoriten</span>
                 </a>
             </li>
         </ul>
@@ -48,8 +48,8 @@
         </div>
         <div class="filter">
             <button id="filter-datum"> Datum </button>
-            <button id="filter-sprache"> Sprache </button>
-            <button id="filter-titel"> Titel </button>
+            <button id="filter-sprache"> Titel </button>
+            <button id="filter-titel"> Favoriten </button>
         </div>
 
         <div class="main-container">
@@ -64,7 +64,6 @@
                 <h3> Hinzufügen </h3>
                 <div class="popup-button">
                     <button id="ordner-btn"><i class='bx bx-folder'></i> Ordner </button>
-                    <!--<button id="snippet-btn"><i class='bx bxs-file-doc'></i> Snippet </button>-->
                 </div>
             </div>
 
@@ -78,6 +77,16 @@
                     <button class="fertig-button"> Fertig </button>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- Suche Section -->
+    <section class="suche">
+        <div class="suche-top">
+            <input type="search" id="suche-input" placeholder="Suche nach Snippet Titel..." maxlength="50"><i class='bx bx-search-alt' id="search-btn"></i>
+        </div>
+        <div class="suche-container">
+            <h1 id="keine-ergebnisse"> Keine Ergebnisse gefunden... :/ </h1>
         </div>
     </section>
 
