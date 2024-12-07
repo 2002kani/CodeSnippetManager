@@ -24,6 +24,10 @@
     left: 250px;
     width: calc(100% - 250px);
 }
+.sidebar.active ~ .favoriten{
+    left: 250px;
+    width: calc(100% - 250px);
+}
 
 .sidebar.active{
     width: 250px;
@@ -779,4 +783,49 @@ pre #code-block{
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.favoriten{
+    position: relative;
+    background-color: #eee;
+    min-height: 100vh;
+    top: 0;
+    left: 80px;
+    transition: all 0.5s ease;
+    width: calc(100% - 80px);
+    padding: 1.5rem;
+    display: block;
+}
+
+.favoriten .favoriten-top{
+    background: #fff;
+    padding: 0.8rem;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    cursor: default;
+}
+
+.favoriten-container{
+    width: 100%;
+    height: 82vh;
+    background-color: #fff;
+    margin-top: 25px;
+    border-radius: 15px;
+    padding: 2.5rem 1rem 1rem 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 390px);
+    justify-content: start;
+    align-content: start;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    gap: 2rem;
+    visibility: visible;
+}
+
+.favoriten-container .keine-ergebnisse{
+    display: flex;
+    justify-content: center;
+    margin-top: 200px;
+    color: #2a2a2a;
 }
