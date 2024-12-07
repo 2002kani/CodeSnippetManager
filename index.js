@@ -13,6 +13,7 @@ const sucheBar = document.getElementById("suche-bar").addEventListener("click", 
 const favoritenBar = document.getElementById("favoriten-bar").addEventListener("click", function(){
     dokumente.style.display = "none";
     suche.style.display = "none";
+    ladeFavoriten();
 });
 const dokumenteBarIcon = document.querySelector(".bx-folder-open").addEventListener("click", function(){
     dokumente.style.display = "block";
@@ -25,6 +26,7 @@ const sucheBarIcon = document.querySelector(".bx-search-alt-2").addEventListener
 const favoritenBarIcon = document.querySelector(".bx-bookmark-heart").addEventListener("click", function(){
     dokumente.style.display = "none";
     suche.style.display = "none";
+    ladeFavoriten();
 });
 
 menuBtn.addEventListener("click", function(){
@@ -40,6 +42,7 @@ menuBtn.addEventListener("click", function(){
 // Popup Section
 const dokumente = document.querySelector(".dokumente");
 const suche = document.querySelector(".suche");
+const favoritenContainer = document.querySelector(".favoriten-container");
 const popup = document.querySelector(".erstellen-popup");
 const erstellenBtn = document.querySelector(".erstellen-button.grid");
 const entfernBtn = document.querySelector(".entfernen-button");
@@ -356,6 +359,7 @@ function AnzeigenOrdnerContainer(ordnerContainer, name, parent){
     
 // Snippet Section
 function erstelleSnippet(name, parentelement, codeblockcode, kurztextInput){
+
     const snippetContainerDiv = document.createElement("div");
     snippetContainerDiv.classList.add("snippet-container");
 
@@ -373,6 +377,44 @@ function erstelleSnippet(name, parentelement, codeblockcode, kurztextInput){
 
     const favorisierenI = document.createElement("i");
     favorisierenI.classList.add("bx", "bx-heart");
+
+    const aktuellerOrdnerName = ordnerName.textContent;
+    const gespeicherteOrdner = JSON.parse(localStorage.getItem("ordner")) || [];
+    const aktuellerOrdner = gespeicherteOrdner.find(o => o.name === aktuellerOrdnerName);
+
+    const aktuellesSnippet = aktuellerOrdner?.snippets?.find(s => s.name === name);
+    if (aktuellesSnippet?.istFavorite) {
+        favorisierenI.classList.remove("bx-heart");
+        favorisierenI.classList.add("bxs-heart");
+    }
+
+    favorisierenI.addEventListener("click", () => {
+        const gespeicherteOrdner = JSON.parse(localStorage.getItem("ordner")) || [];
+        const ordnerIndex = gespeicherteOrdner.findIndex(o => o.name === aktuellerOrdnerName);
+
+        if (ordnerIndex !== -1) {
+            const snippetIndex = gespeicherteOrdner[ordnerIndex].snippets.findIndex(s => s.name === name);
+            
+            if (snippetIndex !== -1) {
+                
+                // Toggle Favoriten-Status
+                gespeicherteOrdner[ordnerIndex].snippets[snippetIndex].istFavorite = 
+                    !gespeicherteOrdner[ordnerIndex].snippets[snippetIndex].istFavorite;
+
+                // Visuelles Feedback
+                if (gespeicherteOrdner[ordnerIndex].snippets[snippetIndex].istFavorite) {
+                    favorisierenI.classList.remove("bx-heart");
+                    favorisierenI.classList.add("bxs-heart");
+                } else {
+                    favorisierenI.classList.remove("bxs-heart");
+                    favorisierenI.classList.add("bx-heart");
+                }
+
+                // Speichern
+                localStorage.setItem("ordner", JSON.stringify(gespeicherteOrdner));
+            }
+        }
+    });
 
     const x = document.createElement("i");
     x.classList.add("bx", "bx-x");
@@ -487,7 +529,8 @@ function erstelleSnippetPopup(){
             gespeicherteOrdner[aktuellerOrdnerIndex].snippets.push({
                 name: snippetName,
                 kurztext: kurztextInput.value,
-                code: textArea.value
+                code: textArea.value,
+                istfavorit: false
             });
 
             localStorage.setItem("ordner", JSON.stringify(gespeicherteOrdner));
@@ -557,7 +600,7 @@ function toggleKeineErgebnisse(show) {
     
     if (keineErgebnisse && sucheContainer) {
         if (show) {
-            keineErgebnisse.style.display = 'block';
+            keineErgebnisse.style.display = 'flex';
             sucheContainer.classList.add('no-results');
         } else {
             keineErgebnisse.style.display = 'none';
@@ -619,3 +662,40 @@ window.addEventListener('DOMContentLoaded', sucheSnippets);
 
 document.getElementById("suche-input").addEventListener("input", sucheSnippets);
 document.getElementById("search-btn").addEventListener("click", sucheSnippets);
+
+
+// Favorisieren Section
+
+function ladeFavoriten(){
+    const favoritenContainer = document.querySelector(".favoriten-container");
+    favoritenContainer.innerHTML = "";
+
+    const AlleOrdner = JSON.parse(localStorage.getItem("ordner")) || [];
+    let favoritenSnippets = [];
+
+    // Favoriten sammeln
+    AlleOrdner.forEach(ordner => {
+        if(ordner.snippets){
+            const ordnerFavoriten = ordner.snippets.filter(snippet => snippet.istfavorit === true);
+            favoritenSnippets.concat(ordnerFavoriten);
+        }
+    });
+
+    if(favoritenSnippets.length === 0){
+        const keineErgebnisse = document.createElement("h1");
+        keineErgebnisse.textContent = "Keine Favoriten gefunden...";
+        keineErgebnisse.id = "keine-favoriten";
+        favoritenContainer.appendChild(keineErgebnisse);
+        return;
+    }
+
+    // Favoriten rendern
+    favoritenSnippets.forEach(snippet => {
+        erstelleSnippet(
+            snippet.name,
+            favoritenContainer,
+            { value: snippet.code},
+            { value: snippet.kurztext}
+        );
+    });
+}
