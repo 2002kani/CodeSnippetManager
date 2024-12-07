@@ -11,6 +11,7 @@ const sucheBar = document.getElementById("suche-bar").addEventListener("click", 
     dokumente.style.display = "none";
     suche.style.display = "block";
     favoriten.style.display = "none";
+    sucheSnippets();
 });
 const favoritenBar = document.getElementById("favoriten-bar").addEventListener("click", function(){
     dokumente.style.display = "none";
@@ -27,6 +28,7 @@ const sucheBarIcon = document.querySelector(".bx-search-alt-2").addEventListener
     dokumente.style.display = "none";
     suche.style.display = "block";
     favoriten.style.display = "none";
+    sucheSnippets();
 });
 const favoritenBarIcon = document.querySelector(".bx-bookmark-heart").addEventListener("click", function(){
     dokumente.style.display = "none";
