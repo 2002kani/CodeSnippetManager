@@ -93,11 +93,17 @@ fertigBtn.addEventListener("click", function(){
         return;
     }
 
+    // Timestamp hinzufügen für filter:
+    const erstellungsDatum = new Date().getTime();
+
     erstelleOrdner(ordnerName, mainContent);
 
     // Ordner im localStorage speichern
     let gespeicherteOrdner = JSON.parse(localStorage.getItem("ordner")) || [];
-    gespeicherteOrdner.push({ name: ordnerName });
+    gespeicherteOrdner.push({ 
+        name: ordnerName,
+        erstellungsDatum: erstellungsDatum });
+
     localStorage.setItem("ordner", JSON.stringify(gespeicherteOrdner));
 
     ordnernamePopup.style.visibility = "hidden";
@@ -761,3 +767,30 @@ function löscheSnippetAusFavoriten(snippetName){
 }
 
 window.addEventListener('DOMContentLoaded', ladeFavoriten);
+
+// Filter Section
+document.getElementById("filter-datum").addEventListener("click", sortiereOrdnerDatum);
+
+function sortiereOrdnerDatum(){
+    let gespeicherteOrdner = JSON.parse(localStorage.getItem("ordner")) || [];
+
+    // sortierung nach neuste zuerst
+    gespeicherteOrdner.sort((a, b) => {
+        return (b.erstellungsDatum || 0) - (a.erstellungsDatum || 0);
+    });
+
+    mainContent.innerHTML = '';
+    mainContent.appendChild(erstellenBtn);
+    mainContent.appendChild(popup);
+    mainContent.appendChild(ordnernamePopup);
+
+    erstellenBtn.addEventListener("click", function(){
+        popup.style.visibility = "visible";
+    });
+
+    ordnernamePopup.querySelector(".fertig-button").addEventListener("click", sortiereOrdnerDatum)
+
+    gespeicherteOrdner.forEach(ordner => {
+        erstelleOrdner(ordner.name);
+    });
+}
