@@ -771,6 +771,7 @@ window.addEventListener('DOMContentLoaded', ladeFavoriten);
 // Filter Section
 document.getElementById("filter-datum").addEventListener("click", sortiereOrdnerDatum);
 document.getElementById("filter-sprache").addEventListener("click", sortiereOrdnerTitel);
+document.getElementById("filter-zufall").addEventListener("click", sortiereOrdnerZufall);
 
 function sortiereOrdnerDatum(){
     let gespeicherteOrdner = JSON.parse(localStorage.getItem("ordner")) || [];
@@ -814,6 +815,27 @@ function sortiereOrdnerTitel(){
     });
 
     ordnernamePopup.querySelector(".fertig-button").addEventListener("click", sortiereOrdnerTitel);
+
+    gespeicherteOrdner.forEach(ordner =>{
+        erstelleOrdner(ordner.name);
+    })
+}
+
+function sortiereOrdnerZufall(){
+    let gespeicherteOrdner = JSON.parse(localStorage.getItem("ordner")) || [];
+
+    gespeicherteOrdner.sort(() => Math.random() - 0.5);
+
+    mainContent.innerHTML = "";
+    mainContent.appendChild(erstellenBtn);
+    mainContent.appendChild(popup);
+    mainContent.appendChild(ordnernamePopup);
+
+    erstellenBtn.addEventListener("click", function(){
+        popup.style.visibility = "visible";
+    });
+
+    ordnernamePopup.querySelector(".fertig-button").addEventListener("click", sortiereOrdnerZufall);
 
     gespeicherteOrdner.forEach(ordner =>{
         erstelleOrdner(ordner.name);
