@@ -38,6 +38,9 @@ const favoritenBarIcon = document.querySelector(".bx-bookmark-heart").addEventLi
 });
 
 menuBtn.addEventListener("click", function(){
+    if (window.innerWidth <= 570) {
+        return;
+    }
     sidebar.classList.toggle("active");
 
     if(sidebar.classList.contains("active")){
@@ -68,6 +71,12 @@ const mainContent = document.querySelector(".main-container");
 const filter = document.querySelector(".filter");
 const ordnerName = document.getElementById("ordner-name");
 const zurückBtn = document.getElementById("zurück-btn");
+
+window.addEventListener('resize', function() {
+    if (window.innerWidth <= 510) {
+        document.querySelector('.sidebar').classList.remove('active');
+    }
+});
 
 erstellenBtn.addEventListener("click", function(){
     popup.style.visibility = "visible";
