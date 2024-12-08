@@ -196,7 +196,7 @@
     border-right: 2px solid #eee;
 }
 
-#filter-titel{
+#filter-zufall{
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     border-left: 2px solid #eee;
@@ -794,7 +794,7 @@ pre #code-block{
     transition: all 0.5s ease;
     width: calc(100% - 80px);
     padding: 1.5rem;
-    display: block;
+    display: none;
 }
 
 .favoriten .favoriten-top{
@@ -828,4 +828,166 @@ pre #code-block{
     justify-content: center;
     margin-top: 200px;
     color: #2a2a2a;
+}
+
+
+@media (max-width: 990px){
+    .suche-container{
+        grid-template-columns: repeat(auto-fit, 320px);
+    }
+
+    .ordner-inhalt{
+        grid-template-columns: repeat(auto-fit, 320px);
+    }
+
+    .favoriten-container{
+        grid-template-columns: repeat(auto-fit, 320px);
+    }
+
+    .snippet-container {
+        gap: 10px;
+        width: 320px;
+    }
+}
+
+@media (max-width: 890px){
+    .main-container{
+        grid-template-columns: repeat(auto-fit, 110px);
+    }
+
+    .erstellen-button.grid{
+        height: 120px;
+    }
+    
+    .erstellen-button h1{
+        font-size: 2rem;
+    }
+
+    .grid i{
+        font-size: 20px;
+        top: 30px;
+        right: 24px;
+    }
+    
+    .grid .bx-x{
+        top: 32px;
+        font-size: 15px;
+    }
+    
+    .grid img{
+        height: 110px;
+    }
+    
+    .grid p{
+        font-size: 11px;
+        font-weight: 600;
+        color: #2a2a2a;
+    }
+
+    .suche-container{
+        grid-template-columns: repeat(auto-fit, 300px);
+    }
+
+    .ordner-inhalt{
+        grid-template-columns: repeat(auto-fit, 300px);
+    }
+
+    .favoriten-container{
+        grid-template-columns: repeat(auto-fit, 300px);
+    }
+
+    .snippet-container {
+        gap: 10px;
+        width: 300px;
+    }
+
+    .snippet-Popup{
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 650px){
+
+    .suche-container{
+        grid-template-columns: repeat(auto-fit, 240px);
+    }
+    .ordner-inhalt{
+        grid-template-columns: repeat(auto-fit, 240px);
+    }
+    .favoriten-container{
+        grid-template-columns: repeat(auto-fit, 240px);
+    }
+
+    .snippet-container {
+        gap: 10px;
+        width: 240px;
+    }
+
+    .snippet-Popup .snippet-beschreibung {
+        width: 250px;
+    }
+
+    .snippet-Popup .snippet-beschreibung #snippet-titel{
+        font-size: 17px;
+    }
+
+    .snippet-Popup .snippet-beschreibung #snippet-kurztext{
+        height: 35px;
+    }
+
+    .snippet-Popup textarea{
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 475px){
+    .erstellen-popup{
+        padding: 3rem;
+    }
+    
+    .ordnername-popup{
+        padding: 2rem;
+    }
+
+    .snippet-Popup .snippet-beschreibung {
+        width: 210px;
+    }
+
+    .snippet-Popup .snippet-beschreibung #snippet-titel{
+        font-size: 16px;
+    }
+
+    .snippet-Popup .snippet-beschreibung #snippet-kurztext{
+        height: 35px;
+    }
+}
+
+@media (max-width: 420px){
+    .suche-container{
+        grid-template-columns: repeat(auto-fit, 210px);
+    }
+    .ordner-inhalt{
+        grid-template-columns: repeat(auto-fit, 210px);
+    }
+    .favoriten-container{
+        grid-template-columns: repeat(auto-fit, 210px);
+    }
+    .snippet-container {
+        width: 210px;
+    }
+}
+
+@media (max-width: 385px){
+    .suche-container{
+        grid-template-columns: repeat(auto-fit, 190px);
+    }
+    .ordner-inhalt{
+        grid-template-columns: repeat(auto-fit, 190px);
+    }
+    .favoriten-container{
+        grid-template-columns: repeat(auto-fit, 190px);
+    }
+    .snippet-container {
+        width: 190px;
+    }
 }
