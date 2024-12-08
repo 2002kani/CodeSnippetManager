@@ -770,6 +770,7 @@ window.addEventListener('DOMContentLoaded', ladeFavoriten);
 
 // Filter Section
 document.getElementById("filter-datum").addEventListener("click", sortiereOrdnerDatum);
+document.getElementById("filter-sprache").addEventListener("click", sortiereOrdnerTitel);
 
 function sortiereOrdnerDatum(){
     let gespeicherteOrdner = JSON.parse(localStorage.getItem("ordner")) || [];
@@ -788,9 +789,33 @@ function sortiereOrdnerDatum(){
         popup.style.visibility = "visible";
     });
 
-    ordnernamePopup.querySelector(".fertig-button").addEventListener("click", sortiereOrdnerDatum)
+    ordnernamePopup.querySelector(".fertig-button").addEventListener("click", sortiereOrdnerDatum);
 
     gespeicherteOrdner.forEach(ordner => {
         erstelleOrdner(ordner.name);
     });
+}
+
+function sortiereOrdnerTitel(){
+    let gespeicherteOrdner = JSON.parse(localStorage.getItem("ordner")) || [];
+
+    // sortierung nach alphabet zuerst
+    gespeicherteOrdner.sort((a, b) => {
+        return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+    });
+
+    mainContent.innerHTML = "";
+    mainContent.appendChild(erstellenBtn);
+    mainContent.appendChild(popup);
+    mainContent.appendChild(ordnernamePopup);
+
+    erstellenBtn.addEventListener("click", function(){
+        popup.style.visibility = "visible";
+    });
+
+    ordnernamePopup.querySelector(".fertig-button").addEventListener("click", sortiereOrdnerTitel);
+
+    gespeicherteOrdner.forEach(ordner =>{
+        erstelleOrdner(ordner.name);
+    })
 }
