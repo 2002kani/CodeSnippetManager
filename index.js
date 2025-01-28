@@ -16,7 +16,7 @@ const sucheBar = document.getElementById("suche-bar").addEventListener("click", 
 const favoritenBar = document.getElementById("favoriten-bar").addEventListener("click", function(){
     dokumente.style.display = "none";
     suche.style.display = "none";
-    favoriten.style.display = "block";
+    favoriten.style.display = "block"; 
     ladeFavoriten(); 
 });
 const dokumenteBarIcon = document.querySelector(".bx-folder-open").addEventListener("click", function(){
