@@ -4,7 +4,7 @@ const sidebar = document.querySelector(".sidebar");
 
 const dokumenteBar = document.getElementById("dokumente-bar").addEventListener("click", function(){
     dokumente.style.display = "block";
-    suche.style.display = "none";
+    suche.style.display = "none"; 
     favoriten.style.display = "none";
 });
 const sucheBar = document.getElementById("suche-bar").addEventListener("click", function(){
