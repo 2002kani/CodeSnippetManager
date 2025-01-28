@@ -3,7 +3,7 @@ const menuBtn = document.querySelector(".menu-btn");
 const sidebar = document.querySelector(".sidebar");
 
 const dokumenteBar = document.getElementById("dokumente-bar").addEventListener("click", function(){
-    dokumente.style.display = "block";
+    dokumente.style.display = "block"; 
     suche.style.display = "none"; 
     favoriten.style.display = "none";
 });
