@@ -368,7 +368,7 @@ function AnzeigenOrdnerContainer(ordnerContainer, name, parent){
         mainContent.style.display = "grid";
         filter.style.display = "";
         ordnerContainer.style.display = "none";
-
+ 
         ordnerName.textContent = "Dokumente";
 
         const vorhandenerErstellenButtonDiv = document.querySelector(".erstellen-button-div");
